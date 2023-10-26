@@ -26,11 +26,11 @@ MonoBehaviour:
   m_Values:
   - '{}'
   - '{}'
+  - '{"position":{"x":735.0,"y":9.0,"z":0.0},"scale":{"x":0.2637711763381958,"y":0.2637711763381958,"z":1.0}}'
+  - '{"m_Version":0,"m_SelectedElementsArray":[]}'
   - '{}'
   - '{}'
   - '{}'
   - '{}'
   - '{}'
   - '{}'
-  - '{"position":{"x":677.0,"y":30.0,"z":0.0},"scale":{"x":0.9308411478996277,"y":0.9308411478996277,"z":1.0}}'
-  - '{"m_Version":2,"m_SelectedElementsArray":[]}'

@@ -1,12 +1,15 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.AI.Navigation;
 using Unity.VisualScripting;
 using UnityEngine;
 
 public class TerrainManager : MonoBehaviour
 {
     private Terrain _terrain = null;
+
+    public NavMeshSurface _navMeshSurface;
 
     [SerializeField]
     private int _countTileGoal = 4;//이거 늘리면 세대가 지나면서 땅이 점점 줄어들음
@@ -24,6 +27,11 @@ public class TerrainManager : MonoBehaviour
     int[,] _tempMap;
 
     //셀룰러 오토마타=================================================
+    //인게임 시작=====================================================
+    private PlayerController _playerController;
+
+    //인게임 시작=====================================================
+
     void MakeNoise()
     {
         for (int i = 0; i < _mapSize; i++)
@@ -155,12 +163,33 @@ public class TerrainManager : MonoBehaviour
 
     //셀룰러 오토마타=================================================
 
+    void BakeMap()
+    {
+        _navMeshSurface = GameObject.Find("NavMeshSurface").GetComponent<NavMeshSurface>();
+        if(_navMeshSurface)
+            _navMeshSurface.BuildNavMesh();
+    }
+
+    private void Awake()
+    {
+        _playerController = GameObject.Find("InGameManager").GetComponentInChildren<PlayerController>();
+    }
+
     void Start()
     {
         _terrain = GameObject.Find("Terrain").GetComponent<Terrain>();
         if (_terrain != null)
         {
+            //맵만들고
             MakeMap();
+            //오브젝트배치함
+            //SceneController.FirstSpawn(터레인,2차원배열);
+            //해당 맵으로 bake해서서 오브젝트들 움직일수있게함
+            BakeMap();
+            //GameStart();
+            //스폰가능위치 지정후 스폰
+            _playerController.SetPlayerStart(transform);
+            _playerController.SpawnPlayer();
         }
         else
             Debug.Log("Terrain Error");
