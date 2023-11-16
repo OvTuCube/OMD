@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Rendering;
+using UnityEngine.UIElements;
 
 public class Player : MonoBehaviour
 {
@@ -23,10 +25,14 @@ public class Player : MonoBehaviour
     //행동에 따른 이동 관련=========================
     public bool _isCanMove = true;
 
-
     //행동에 따른 이동 관련=========================
 
     //private Item _hundledItem;
+
+    //==============================================
+    //아이템 줍기위해 박스 collider저장
+    private BoxCollider _boxCollider;
+    private int _ItemLayer;
 
     //==============================================
     //플레이어 컨트롤
@@ -65,6 +71,41 @@ public class Player : MonoBehaviour
     }
 
     //==============================================
+    //아이템 줍기
+    public void TakeDropItem()
+    {
+        Vector3 boxCenter = _boxCollider.transform.position;
+        Vector3 boxHalf = _boxCollider.transform.localScale * 0.5f;
+        Quaternion boxRot = _boxCollider.transform.rotation;
+
+        {
+            Collider[] colliders = Physics.OverlapBox(boxCenter, boxHalf, boxRot, _ItemLayer);
+
+            GameObject nearestItem = null;
+            float nearDistance = float.MaxValue;
+            foreach (Collider collider in colliders)
+            {
+                float distance =Vector3.Distance(collider.transform.position, this.gameObject.transform.position);
+                if(distance < nearDistance)
+                {
+                    nearDistance = distance;
+                    nearestItem = collider.gameObject;
+                }
+            }
+
+            if(nearestItem)
+            {
+                ItemObjectIndexCount dropItemStatus = nearestItem.GetComponent<ItemObjectIndexCount>();
+                int index = dropItemStatus.ItemIndex;
+                int count = dropItemStatus.ItemCount;
+
+                this.gameObject.GetComponent<PlayerInventory>().AddItem_IndexCount(index, count);
+                Destroy(nearestItem);
+            }
+        }
+    }
+
+    //==============================================
     //Animation 관련
 
     void Axing(Status targetStatus)
@@ -89,7 +130,7 @@ public class Player : MonoBehaviour
         {
             if (isAxingFinish)
             {
-                if(targetStatus.ChangeHP(-200))//나중에 현재 플레이어가 들고있는 아이템이 주는 상호작용값을 넣어야함
+                if(targetStatus.ChangeHP(this.gameObject,-200))//나중에 현재 플레이어가 들고있는 아이템이 주는 상호작용값을 넣어야함
                     _playerController.ReBakeNMSLate();
 
                 _playerNavMeshAgent.isStopped = false;
@@ -159,6 +200,9 @@ public class Player : MonoBehaviour
 
         _playerController = GameObject.Find("InGameManager").GetComponent<PlayerController>();
         _playerNavMeshAgent = this.gameObject.GetComponent<NavMeshAgent>();
+
+        _boxCollider = this.gameObject.GetComponent<BoxCollider>();
+        _ItemLayer = LayerMask.GetMask("DropItem");
     }
 
     // Start is called before the first frame update

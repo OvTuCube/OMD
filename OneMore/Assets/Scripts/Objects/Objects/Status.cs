@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 //Type에 관련 설명
@@ -31,6 +32,15 @@ public class Status : MonoBehaviour
     private bool _isAlive = false;
     public bool IsAlive { get { return _isAlive; } set { _isAlive = value; } }
 
+    //오브젝트 소환을 위한 오브젝트컨트롤러 저장
+    private ObjectController _objectController;
+
+    //===============================================================
+    //죽였을때 획득아이템/드랍아이템 저장
+    private Dictionary<int, int> _dropItems;
+    public Dictionary<int, int> DropItems { get { return _dropItems; } set { _dropItems = value; } }
+    //===============================================================
+
     public void SpawnStatus(Transform spawnPoint, int hp = 1, StandingType standingType = StandingType.Normal)
     {
         if (_isSpawn) return;
@@ -45,20 +55,38 @@ public class Status : MonoBehaviour
         this.gameObject.transform.rotation = spawnPoint.rotation;
     }
 
-    private void Dead()
+    private void Dead(GameObject Killer)
     {
         _isAlive = false;
         //죽음때 어캐할건지
 
+        if (_standingType == StandingType.Stuff)
+        {
+            foreach (KeyValuePair<int, int> pair in _dropItems)
+            {
+                Killer.GetComponent<PlayerInventory>().AddItem_IndexCount(pair.Key, pair.Value); ;
+            }
+        }
+        else
+        {
+            foreach (KeyValuePair<int, int> pair in _dropItems)
+            {
+                Vector3 pos;
+                pos = this.gameObject.transform.position;
+
+                _objectController.CreateItemObject(pair.Key, pair.Value, pos);
+            }
+        }
+
         Destroy(this.gameObject);
     }
 
-    void Check()
+    void Check(GameObject Killer)
     {
         //죽음
         if(_hp < 1)
         {
-            Dead();
+            Dead(Killer);
         }
     }
 
@@ -67,10 +95,10 @@ public class Status : MonoBehaviour
         //아이템 받기
 
         //오브젝트 삭제
-        Dead();
+        Dead(Killer);
     }
 
-    public bool ChangeHP(int hpValue)
+    public bool ChangeHP(GameObject Killer,int hpValue)
     {
         if (_hp < 1) return true;
 
@@ -84,9 +112,14 @@ public class Status : MonoBehaviour
         {
         }
 
-        Check();
+        Check(Killer);
 
         return !_isAlive;
+    }
+
+    private void Awake()
+    {
+        _objectController = GameObject.Find("InGameManager").GetComponent<ObjectController>();
     }
 
     // Start is called before the first frame update

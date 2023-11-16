@@ -371,13 +371,16 @@
 "Assets/Scripts/GameManager.cs"
 "Assets/Scripts/LobbyController.cs"
 "Assets/Scripts/ObjectController.cs"
+"Assets/Scripts/Objects/Objects/ItemObjectIndexCount.cs"
 "Assets/Scripts/Objects/Objects/Player/Player.cs"
+"Assets/Scripts/Objects/Objects/Player/PlayerInventory.cs"
 "Assets/Scripts/Objects/Objects/Status.cs"
 "Assets/Scripts/Objects/Terrain/NavMeshSurfaceControl.cs"
 "Assets/Scripts/Objects/Terrain/TerrainManager.cs"
 "Assets/Scripts/PlayerController.cs"
 "Assets/Scripts/SceneController.cs"
 "Assets/Scripts/SoundManager.cs"
+"Assets/Scripts/UIManager.cs"
 "Assets/TutorialInfo/Scripts/Readme.cs"
 -langversion:9.0
 

@@ -1,4 +1,5 @@
-Key,Name,Type,HP,Prefab,Icon
-0,wood,0,1,wood,wood
-1,stone,0,1,stone,stone
-100,redmushroom,100,100,redmushroom,redmushroom
+Key,Name,Type,HP,Prefab,Icon,parts,stand
+0,wood,0,1,wood,wood,-,-
+1,stone,0,1,stone,stone,-,-
+100,redmushroom,100,100,redmushroom,redmushroom,-,-
+101,brownmushroom,100,100,brownmushroom,brownmushroom,-,-

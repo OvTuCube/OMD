@@ -133,6 +133,12 @@ public class PlayerController : MonoBehaviour
                     }
                 }
             }
+            //스페이스바 아이템 줍기
+            if(Input.GetKeyDown(KeyCode.Space))
+            {
+                Debug.Log("Input SpaceBar");
+                _player.TakeDropItem();
+            }
         }
     }
 
