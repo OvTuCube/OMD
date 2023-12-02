@@ -34,7 +34,7 @@ public struct ItemData
     public GameObject _prefab;
     public Sprite _icon;
     public Dictionary<int, int> _partItems;//어떤아이템,몇개 필요한지 (count == 0 -> 없음)
-    public int _stand;//설치물일때 설치할 stand의 인덱스(-1 == 없음)
+    public string _stand;//설치물일때 설치할 stand의 인덱스(-1 == 없음)
 }
 
 [Serializable]
@@ -130,17 +130,20 @@ public class ObjectController : MonoBehaviour
             standingData._prefab = Resources.Load<GameObject>("Prefabs/StandingObject/" + colData[4]);
 
             standingData._dropItems = new Dictionary<int, DropItem>();
-            string[] items = colData[5].Split("/");
-            for(int index = 0;index < items.Length;index++)
+            if(colData[5] != "-")
             {
-                string[] words;
-                words = items[index].Split("~");
+                string[] items = colData[5].Split("/");
+                for(int index = 0;index < items.Length;index++)
+                {
+                    string[] words;
+                    words = items[index].Split("~");
 
-                DropItem dropItem = new DropItem();
-                dropItem._itemIndex = int.Parse(words[0]);
-                dropItem._minCount = int.Parse(words[1]);
-                dropItem._maxCount = int.Parse(words[2]);
-                standingData._dropItems.Add(dropItem._itemIndex, dropItem);
+                    DropItem dropItem = new DropItem();
+                    dropItem._itemIndex = int.Parse(words[0]);
+                    dropItem._minCount = int.Parse(words[1]);
+                    dropItem._maxCount = int.Parse(words[2]);
+                    standingData._dropItems.Add(dropItem._itemIndex, dropItem);
+                }
             }
 
             _standingItemDatas.Add(standingData._key, standingData);
@@ -174,7 +177,7 @@ public class ObjectController : MonoBehaviour
             itemData._partItems = new Dictionary<int, int>();
             if (colData[6] != "-")
             {
-                string[] items = colData[5].Split("/");
+                string[] items = colData[6].Split("/");
                 for (int index = 0; index < items.Length; index++)
                 {
                     string[] words;
@@ -184,10 +187,10 @@ public class ObjectController : MonoBehaviour
                 }
             }
 
-            if (colData[6] != "-")
-                itemData._stand = int.Parse(colData[7]);
+            if (colData[7] != "-")
+                itemData._stand = colData[7];
             else
-                itemData._stand = -1;
+                itemData._stand = "-";
 
             _itemDatas.Add(itemData._key,itemData);
         }

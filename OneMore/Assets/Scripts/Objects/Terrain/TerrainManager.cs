@@ -215,7 +215,19 @@ public class TerrainManager : MonoBehaviour
             _playerController.SpawnPlayer();
 
             //해당 맵으로 bake해서서 오브젝트들 움직일수있게함
+            _playerController.SetPlayerPos();
             BakeMap();
+
+            UnityEngine.Vector3 tempPos = new Vector3();
+            tempPos.x = 30;
+            tempPos.y = 0.8f;
+            tempPos.z = 30;
+            
+            for(int i=0;i<10; i++)
+            {
+                tempPos.z += i;
+                _objectController.CreateItemObject(100,18, tempPos);
+            }
         }
         else
             Debug.Log("Terrain Error");

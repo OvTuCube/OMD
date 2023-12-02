@@ -3,3 +3,8 @@ Key,Name,Type,HP,Prefab,Icon,parts,stand
 1,stone,0,1,stone,stone,-,-
 100,redmushroom,100,100,redmushroom,redmushroom,-,-
 101,brownmushroom,100,100,brownmushroom,brownmushroom,-,-
+102,rawmeat,100,100,bundle,rawmeat,-,-
+202,cookedmeat,200,100,bundle,cookedmeat,-,-
+400,ax,400,100,ax,ax,0~2/1~1,-
+500,campfire,500,1,bundle,campfire,0~3/1~3,campfire
+501,tent,500,1,bundle,tent,0~5/1~4,tent

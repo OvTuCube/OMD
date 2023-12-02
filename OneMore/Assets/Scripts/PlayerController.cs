@@ -39,6 +39,9 @@ public class PlayerController : MonoBehaviour
     //내비매쉬컨트롤
     private NavMeshSurfaceControl _navMeshSurfaceControl;
 
+    //UIController하기 여기서 input관리하니깐
+    UIManager _uiManager;
+
     //==========================================================
 
     //터레인의 터레인메니져가 실행되면 
@@ -139,6 +142,12 @@ public class PlayerController : MonoBehaviour
                 Debug.Log("Input SpaceBar");
                 _player.TakeDropItem();
             }
+
+            //탭 누르면 inven열리고 닫힘
+            if(Input.GetKeyDown(KeyCode.Tab))
+            {
+                _uiManager.ItemSlotUI();
+            }
         }
     }
 
@@ -155,16 +164,27 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void SetPlayerPos()
+    {
+        UnityEngine.Vector3 tempPos = new UnityEngine.Vector3();
+        tempPos.x = 32;
+        tempPos.y = 2;
+        tempPos.z = 32;
+
+        _playerObject.transform.position = tempPos;
+    }
+
     private void Awake()
     {
         _layermaskTerrain = LayerMask.GetMask("Terrain");
         _layermaskObject = LayerMask.GetMask("Object");
+
+        _uiManager = GameObject.Find("InGameManager").GetComponent<UIManager>();
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        
     }
 
     // Update is called once per frame
